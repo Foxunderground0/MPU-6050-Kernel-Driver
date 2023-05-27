@@ -19,7 +19,7 @@ int main() {
 		writeMPU(0x6b, 0x00);
 		writeMPU(0x1c, 0x00);
 		writeMPU(0x1a, 0x00);
-
+		printf("%d, %d, %d", readMPU(0x6b), readMPU(0x1c), readMPU(0x1a))
 	}
 
 	snprintf(filename, 19, "/dev/i2c-%d", adapter_nr);
@@ -37,11 +37,11 @@ int main() {
 	}
 
 
-	while (1) {
-		long data = (readMPU(0x3f)) << 8) | readMPU(0x40));
-		data = data / 16384;
-		printf("Val: %f", (float)data);
-	}
+	//	while (1) {
+	long data = (readMPU(0x3f)) << 8) | readMPU(0x40));
+	data = data / 16384;
+	printf("Val: %f", (float)data);
+	//	}
 
 	close(file); // Close the opened I2C device
 	return 0;
