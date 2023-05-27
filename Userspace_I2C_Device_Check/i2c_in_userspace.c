@@ -29,9 +29,9 @@ int main() {
 	}
 
 
-	while (1){
-		printf("%d\n", readMPU(0x3f));
-	}
+	printf("%d\n", readMPU(0x23));
+	writeMPU(0x23, 0xff);
+	printf("%d\n", readMPU(0x23));
 
 	close(file); // Close the opened I2C device
 	return 0;
@@ -39,13 +39,13 @@ int main() {
 
 
 
-unsigned char writeMPU(unsigned char reg){
+unsigned char writeMPU(unsigned char reg, unsigned char val) {
 	unsigned char res;
 
 	/* Using SMBus command */
-	res = i2c_smbus_read_word_data(file, reg);
+	res = i2c_smbus_write_byte_data(file, reg, val);
 	if (res < 0) {
-		printf("Reading From: %d failed\n", reg);
+		printf("Writing: %d at register %d failed\n", val, reg);
 	} else {
 		//printf("%d", res);
 		return res;
@@ -53,11 +53,11 @@ unsigned char writeMPU(unsigned char reg){
 
 }
 
-unsigned char readMPU(unsigned char reg){
+unsigned char readMPU(unsigned char reg) {
 	unsigned char res;
 
 	/* Using SMBus command */
-	res = i2c_smbus_read_word_data(file, reg);
+	res = i2c_smbus_read_byte_data(file, reg);
 	if (res < 0) {
 		printf("Reading From: %d failed\n", reg);
 	} else {
