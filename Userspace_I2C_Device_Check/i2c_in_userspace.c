@@ -37,11 +37,18 @@ int main() {
 	}
 
 
-	//	while (1) {
+	//while (1) {
 	long data = (readMPU(0x3f) << 8) | readMPU(0x40);
 	data = data / 16384;
 	printf("Val: %f", (float)data);
-	//	}
+	//}
+
+	for (unsigned int i = 0x00; i < 0x76; i++)
+	{
+		printf("Val: %X form reg %X", readMPU(i), i);
+	}
+
+
 
 	close(file); // Close the opened I2C device
 	return 0;
