@@ -31,7 +31,7 @@ int main() {
 
 
 	printf("%d\n", readMPU(0x23));
-	writeMPU(0x23, 0xff);
+	writeMPU(0x23, 0x00);
 	printf("%d\n", readMPU(0x23));
 
 	close(file); // Close the opened I2C device
