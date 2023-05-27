@@ -38,8 +38,9 @@ int main() {
 
 
 	while (1) {
-		printf("%d\n", readMPU(0x3f));
-		printf("%d\n", readMPU(0x40));
+		long data = readMPU(0x3f)) << 8 | readMPU(0x40));
+		data = data / 16384;
+		printf("Val: %f", (float)data);
 	}
 
 	close(file); // Close the opened I2C device
