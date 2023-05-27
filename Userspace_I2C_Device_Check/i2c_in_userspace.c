@@ -15,6 +15,13 @@ int main() {
 	int adapter_nr = 1;
 	char filename[20];
 
+	{
+		writeMPU(0x6b, 0x00);
+		writeMPU(0x1c, 0x00);
+		writeMPU(0x1a, 0x00);
+
+	}
+
 	snprintf(filename, 19, "/dev/i2c-%d", adapter_nr);
 
 	file = open(filename, O_RDWR);
@@ -30,9 +37,10 @@ int main() {
 	}
 
 
-	printf("%d\n", readMPU(0x23));
-	writeMPU(0x23, 0x00);
-	printf("%d\n", readMPU(0x23));
+	while (1) {
+		printf("%d\n", readMPU(0x3f));
+		printf("%d\n", readMPU(0x40));
+	}
 
 	close(file); // Close the opened I2C device
 	return 0;
