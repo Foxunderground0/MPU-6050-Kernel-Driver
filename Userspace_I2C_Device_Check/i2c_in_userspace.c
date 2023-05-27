@@ -9,6 +9,7 @@ int addr = 0x68; /* The I2C address of the MPU */
 int file;
 
 unsigned char readMPU(unsigned char reg);  // Function prototype
+unsigned char writeMPU(unsigned char reg, unsigned char val);  // Function prototype
 
 int main() {
 	int adapter_nr = 1;
