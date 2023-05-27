@@ -45,7 +45,7 @@ int main() {
 
 	for (unsigned int i = 0x00; i < 0x76; i++)
 	{
-		printf("Val: %X form reg %X", readMPU(i), i);
+		printf("Val: %X form reg %X\n", readMPU(i), i);
 	}
 
 
