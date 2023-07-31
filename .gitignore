@@ -1,2 +1,15 @@
 Userspace_I2C_Device_Check/i2c_in_userspace
 .vscode
+Kernel_Module/.Module.symvers.cmd
+Kernel_Module/.modules.order.cmd
+Kernel_Module/.MPU6050_device_driver.ko.cmd
+Kernel_Module/.MPU6050_device_driver.mod.cmd
+Kernel_Module/.MPU6050_device_driver.mod.o.cmd
+Kernel_Module/.MPU6050_device_driver.o.cmd
+Kernel_Module/Module.symvers
+Kernel_Module/modules.order
+Kernel_Module/MPU6050_device_driver.ko
+Kernel_Module/MPU6050_device_driver.mod
+Kernel_Module/MPU6050_device_driver.mod.c
+Kernel_Module/MPU6050_device_driver.mod.o
+Kernel_Module/MPU6050_device_driver.o
