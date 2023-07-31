@@ -1,7 +1,5 @@
 all:
-	gcc -o i2c_in_userspace i2c_in_userspace.c -li2c
-
-run:
+	gcc -O -o i2c_in_userspace i2c_in_userspace.c -li2c
 	./i2c_in_userspace
 
 clean:
