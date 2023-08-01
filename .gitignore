@@ -13,3 +13,4 @@ Kernel_Module/MPU6050_device_driver.mod
 Kernel_Module/MPU6050_device_driver.mod.c
 Kernel_Module/MPU6050_device_driver.mod.o
 Kernel_Module/MPU6050_device_driver.o
+Kernel_Module/read_dev_file
