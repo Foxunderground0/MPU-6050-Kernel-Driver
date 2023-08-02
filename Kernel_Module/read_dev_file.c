@@ -12,14 +12,14 @@ int main() {
         return 1;
     }
 
-    uint16_t data;
+    int data;
     ssize_t bytes_read;
 
     // Read multiple 16-bit values from the device file
-    while ((bytes_read = read(fd, &data, sizeof(uint16_t))) == sizeof(uint16_t)) {
+    while ((bytes_read = read(fd, &data, sizeof(int))) == sizeof(int)) {
         // Process the 16-bit value received from the device
         // For example, you can print it in hexadecimal format:
-        printf("Received value: 0x%04x\n", data);
+        printf("Val: %f\n", (float)data / 16384.0);
     }
 
     close(fd);

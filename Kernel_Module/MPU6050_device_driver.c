@@ -38,10 +38,13 @@ static int mpu_read(uint8_t* out_buf, uint8_t len) {
 	return ret;
 }
 
-static int16_t mpu_get_value(void) {
+// Function to read the values from registers 0x3F and 0x40 of MPU6050
+int mpu_read_registers(void) {
+	uint8_t buf[2];
+	int data = 0;
+
 	// Read register 0x3F
-	uint8_t buf;
-	buf = 0x3F;
+	buf[0] = 0x3F;
 	if (i2c_master_send(i2c_client_mpu, buf, 1) < 0) {
 		printk(KERN_ERR "Failed to send register address 0x3F\n");
 		return -EIO;
@@ -50,10 +53,10 @@ static int16_t mpu_get_value(void) {
 		printk(KERN_ERR "Failed to read from register 0x3F\n");
 		return -EIO;
 	}
-	uint8_t register3F_value = buf;
+	uint8_t register3F_value = buf[0];
 
 	// Read register 0x40
-	buf = 0x40;
+	buf[0] = 0x40;
 	if (i2c_master_send(i2c_client_mpu, buf, 1) < 0) {
 		printk(KERN_ERR "Failed to send register address 0x40\n");
 		return -EIO;
@@ -62,16 +65,14 @@ static int16_t mpu_get_value(void) {
 		printk(KERN_ERR "Failed to read from register 0x40\n");
 		return -EIO;
 	}
-	uint8_t register40_value = buf;
+	uint8_t register40_value = buf[0];
 
-	printk(KERN_INFO "Register 0x3F value: 0x%x\n", register3F_value);
-	printk(KERN_INFO "Register 0x40 value: 0x%x\n", register40_value);
-
-	int16_t data = ((register3F_value << 8) | register40_value);
+	// Combine the values into a single 16-bit integer
+	data = ((register3F_value << 8) | register40_value);
 	if (data > 32767) {
 		data -= 65536;
 	}
-	//data = data / 16384.0;
+
 	return data;
 }
 
@@ -82,7 +83,6 @@ static int mpu_probe(struct i2c_client* client, const struct i2c_device_id* id) 
 	//Set Poewer registers to enable readings
 	uint8_t buf[2] = { 0x6b, 0 };
 	mpu_write(buf, 2);
-
 	return 0;
 }
 
@@ -105,23 +105,19 @@ static int mpu_release_file(struct inode* inode, struct file* filp) {
 	return 0;
 }
 
-uint16_t data = 0x0000; // The 16-bit unsigned value to read
 static ssize_t mpu_read_file(struct file* filp, char __user* buf, size_t count, loff_t* f_pos) {
-	data = mpu_get_value();
-	// Read the 16-bit value from the device (replace this with your actual reading code)
-	// For example, if the data is stored in a variable named 'sensor_data':
-	// data = sensor_data;
+	int data = mpu_read_registers();
 
 	// Copy the 16-bit value to the user-space buffer 'buf'
-	if (copy_to_user(buf, &data, sizeof(int16_t)) != 0) {
+	if (copy_to_user(buf, &data, sizeof(int)) != 0) {
 		// Failed to copy data to user space
 		return -EFAULT; // Return the error code for "Bad address"
 	}
-
+	LOG("Read");
 	// Update the file position to indicate the next position to read (if needed)
 	// For example, if you want to read a different value on the next read, you can update *f_pos here
 
-	return sizeof(int16_t); // Return the number of bytes read (should be 2 bytes for a 16-bit value)
+	return sizeof(int); // Return the number of bytes read (should be 2 bytes for a 16-bit value)
 }
 
 static ssize_t mpu_write_file(struct file* filp, const char __user* buf, size_t count, loff_t* f_pos) {
@@ -219,6 +215,8 @@ static int __init mpu_driver_init(void) {
 	} else {
 		ELOG("Couldnt obtain i2c adapter")
 	}
+
+	//printk("%x", mpu_get_value());
 
 	return 0;
 }
