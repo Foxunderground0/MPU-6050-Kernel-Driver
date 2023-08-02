@@ -197,7 +197,6 @@ static int create_cdev_file(void) {
 static int __init mpu_driver_init(void) {
 	LOG("MPU6050 driver loaded\n");
 	i2c_adapter = i2c_get_adapter(I2C_BUS_ADAPTER_NUMBER);
-
 	if (i2c_adapter != NULL) {
 		i2c_client_mpu = i2c_new_client_device(i2c_adapter, &mpu_i2c_board_info);
 
