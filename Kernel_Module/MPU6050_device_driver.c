@@ -2,10 +2,8 @@
 #include <linux/init.h>
 #include <linux/i2c.h>
 #include <linux/module.h>
-
 #include <linux/cdev.h>
 #include <linux/fs.h>
-
 #include <linux/uaccess.h>
 
 #define LOG(x) printk("%s", x) // Helper logger macro
@@ -86,10 +84,6 @@ static int mpu_probe(struct i2c_client* client, const struct i2c_device_id* id) 
 	return 0;
 }
 
-/*
-** This function getting called when the slave has been removed
-** Note : This will be called only once when we unload the driver.
-*/
 static void mpu_remove(struct i2c_client* client) {
 	LOG("MPU Removed");
 	//return 0;
@@ -113,7 +107,7 @@ static ssize_t mpu_read_file(struct file* filp, char __user* buf, size_t count, 
 		// Failed to copy data to user space
 		return -EFAULT; // Return the error code for "Bad address"
 	}
-	LOG("Read");
+	//LOG("Read");
 	// Update the file position to indicate the next position to read (if needed)
 	// For example, if you want to read a different value on the next read, you can update *f_pos here
 
@@ -135,8 +129,8 @@ static struct file_operations mpu_fops = {
 
 // Structure that has slave device id
 static const struct i2c_device_id mpu_id[] = {
-		{ SLAVE_DEVICE_NAME, 0 },
-		{ }
+	{ SLAVE_DEVICE_NAME, 0 },
+	{ }
 };
 
 // This is a macro to add the mpuid to the devices that the i2c subsystem probes for
@@ -144,13 +138,13 @@ MODULE_DEVICE_TABLE(i2c, mpu_id);
 
 // The structure that holds the functions that the driver calls
 static struct i2c_driver mpu_driver = {
-		.driver = {
-			.name = SLAVE_DEVICE_NAME,
-			.owner = THIS_MODULE,
-		},
-		.probe = mpu_probe,
-		.remove = mpu_remove,
-		.id_table = mpu_id,
+	.driver = {
+		.name = SLAVE_DEVICE_NAME,
+		.owner = THIS_MODULE,
+	},
+	.probe = mpu_probe,
+	.remove = mpu_remove,
+	.id_table = mpu_id,
 };
 
 static int create_cdev_file(void) {
@@ -214,8 +208,6 @@ static int __init mpu_driver_init(void) {
 	} else {
 		ELOG("Couldnt obtain i2c adapter")
 	}
-
-	//printk("%x", mpu_get_value());
 
 	return 0;
 }
